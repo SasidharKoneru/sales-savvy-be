@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salesSavvy.entity.CartData;
 import com.salesSavvy.entity.Product;
+import com.salesSavvy.entity.Users;
 import com.salesSavvy.service.ProductService;
+import com.salesSavvy.service.UsersService;
 
 @CrossOrigin("*")
 @RestController
@@ -19,6 +22,9 @@ public class ProductController {
 	
 	@Autowired
 	ProductService service;
+	
+	@Autowired
+	UsersService uService;
 	
 	@PostMapping("/addProduct")
 	public String addProduct(@RequestBody Product product) {
@@ -43,6 +49,14 @@ public class ProductController {
 	@GetMapping("/getAllProducts") 
 	public List<Product> getAllProducts() {
 		return service.getAllProducts();
+	}
+	
+	@PostMapping("/addToCart")
+	public String addToCart(@RequestBody CartData data) {
+		System.out.println(data);
+		Users user = uService.getUser(data.getUsername());
+		Product prod = service.searchProduct(data.getProductId());
+		return "Cart added";
 	}
 	
 }
